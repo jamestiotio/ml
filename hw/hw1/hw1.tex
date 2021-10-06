@@ -74,15 +74,13 @@ We can plot a visual, graphical representation of the given data points:
 		clip=false,
 		xlabel=$x_1$, ylabel=$x_2$,
 		]
-		\addplot [only marks, mark=*, nodes near coords={\label},
-		visualization depends on={value \thisrowno{2} \as \label}] table {
-			1 1 +
-			2 2 +
+		\addplot [only marks, mark=*, nodes near coords={$+$}] table {
+			1 1
+			2 2
 		};
-		\addplot [only marks, mark=*, nodes near coords={\label},
-		visualization depends on={value \thisrowno{2} \as \label}] table {
-			-1 1 -
-			1 -1 -
+		\addplot [only marks, mark=*, nodes near coords={$-$}] table {
+			-1 1
+			1 -1
 		};
 		\addplot [color=red, domain=-4:4] {-x}
 			node at (axis cs:1.5,-3) {$x_1 + x_2 = 0$};
