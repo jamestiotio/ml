@@ -98,10 +98,12 @@ We can plot a visual, graphical representation of the given data points:
 
 \begin{equation*}
 	h(x, \theta) = \text{sign}(x_1 + x_2) = \text{sign}(\theta \cdot x) = \begin{cases}
-		+1, \quad &\text{if} \, ~ \theta \cdot x > 0 \\
-		-1, \quad &\text{if} \, ~ \theta \cdot x \leq 0 \\
+		+1, \quad &\text{if} \, ~ \theta \cdot x > 0; \\
+		-1, \quad &\text{if} \, ~ \theta \cdot x \leq 0, \\
 	\end{cases}
 \end{equation*}
+
+where $\theta \cdot x = \theta^T x$ and $\theta = [1, 1]^T$.
 
 \end{enumerate}
 
