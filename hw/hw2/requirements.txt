@@ -1,0 +1,4 @@
+libsvm-official
+numpy
+scipy
+numba
