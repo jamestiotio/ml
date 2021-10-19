@@ -1,0 +1,211 @@
+\documentclass[11pt,fancychapters]{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{cite}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{empheq}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage{acro}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{subcaption}
+\usepackage{cancel}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{parskip}
+\usepackage{tcolorbox}
+\usepackage{float}
+\usepackage{bm}
+\usepackage{mathtools}
+\usepackage{pgfplots}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+\pgfplotsset{width=8cm,compat=1.9}
+\newcommand{\dbar}{{d\mkern-7mu\mathchar'26\mkern-2mu}}
+\newcommand{\boxedeq}[2]{\begin{empheq}[box={\fboxsep=6pt\fbox}]{align}\label{#1}#2\end{empheq}}
+\newcommand{\approptoinn}[2]{\mathrel{\vcenter{
+  \offinterlineskip\halign{\hfil$##$\cr
+    #1\propto\cr\noalign{\kern2pt}#1\sim\cr\noalign{\kern-2pt}}}}}
+\newcommand{\appropto}{\mathpalette\approptoinn\relax}
+\renewcommand*{\thesection}{\arabic{section}.}
+\def\*#1{\mathbf{#1}}
+\def\ab{ab}
+\usepackage{tikz}
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+\geometry{top=1.3in,bottom=1.3in}
+
+\begin{document}
+\centerline{\huge{SUTD 2021 50.007 Homework 2}}
+
+\begin{table}[ht]
+\centering
+\footnotesize
+ \begin{tabular}{c c} 
+James Raphael Tiovalen & 1004555
+ \end{tabular}
+\end{table}
+
+\section{Clustering: K-Means and K-Medoids}
+
+\subsection*{Question 1.1}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+	
+\item False. For unsupervised learning, we use unlabeled data. If only some of the data is labeled, it is called semi-supervised learning.
+
+\item True. The choice of distance metric can affect how the clustering algorithm will perform since it is one of the most meaningful numerical measure that said algorithm can use a benchmark and check against (as well as how much to punish/reward similarity/dissimilarity).
+
+\item False. K-means is actually more sensitive to outliers relative to k-medoids since the averages/means of cluster data points could potentially be skewed by anomalous data points.
+
+\item False. While it is true that each iteration of the k-means and k-medoids algorithms would lower the cost (by definition), they are not guaranteed to always converge to the global optimal solution (since they might converge to only the local minimum).
+
+\item False. Different initialization values might lead to different clustering outputs for k-medoids, which might vary the quality of said clusterings.
+
+\end{enumerate}
+
+\subsection*{Question 1.2}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+	
+\item The centroid of $C_1$ would be:
+
+\begin{equation*}
+	\mu_1 = \frac{3 + 4 + 11 + 12}{4} = 7.5
+\end{equation*}
+
+\item The centroid of $C_2$ would be:
+
+\begin{equation*}
+	\mu_2 = \frac{2 + 10}{2} = 6
+\end{equation*}
+
+\item The new cluster formed by $\mu_1$ is $D_1 = \{10, 11, 12\}$, while the new cluster formed by $\mu_2$ is $D_2 = \{2, 3, 4\}$.
+
+\item The centroid of $D_1$ would be:
+
+\begin{equation*}
+	\mu_1' = \frac{10 + 11 + 12}{3} = 11,
+\end{equation*}
+
+while the centroid of $D_2$ would be:
+
+\begin{equation*}
+	\mu_2' = \frac{2 + 3 + 4}{3} = 3
+\end{equation*}
+
+\item Yes, this clustering is stable since the k-means algorithm will converge. With the new centroid values $\mu_1'$ and $\mu_2'$, the cluster assignments will remain the same as the $D_1$ and $D_2$ clusters (and hence, the centroid values as well) found previously for any further iterations of the algorithm.
+
+\end{enumerate}
+
+\section{Support Vector Machines}
+
+\subsection*{Question 2.1}
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+	
+\item The kernel defined by the mapping stated in the question would be:
+
+\begin{equation*}
+	\begin{split}
+	K(\mathbf{x},\mathbf{y}) & = \varphi^T(\mathbf{x}) \varphi(\mathbf{y}) \\
+	       & = \begin{bmatrix}1 & x_1^2 & \sqrt{2}x_1x_2 & x_2^2 & \sqrt{2}x_1 & \sqrt{2}x_2\end{bmatrix} \begin{bmatrix}1 \\ y_1^2 \\ \sqrt{2}y_1y_2 \\ y_2^2 \\ \sqrt{2}y_1 \\ \sqrt{2}y_2\end{bmatrix} \\
+	       & = 1 + x_1^2y_1^2 + 2x_1x_2y_1y_2 + x_2^2y_2^2 + 2x_1y_1 + 2x_2y_2 \\
+	       & = \left( 1 + \mathbf{x}^T \mathbf{y} \right)^2
+	\end{split}
+\end{equation*}
+
+\item With $\mathbf{x} = \begin{bmatrix}1 & 2\end{bmatrix}^T$ and $\mathbf{y} = \begin{bmatrix}3 & 4\end{bmatrix}^T$, we can obtain the value of the kernel via simple substitution:
+
+\begin{equation*}
+	\begin{split}
+	K(\mathbf{x},\mathbf{y}) & = 1 + x_1^2y_1^2 + 2x_1x_2y_1y_2 + x_2^2y_2^2 + 2x_1y_1 + 2x_2y_2 \\
+	       & = 1 + 1^2\cdot3^2 + 2\cdot1\cdot2\cdot3\cdot4 + 2^2\cdot4^2 + 2\cdot1\cdot3 + 2\cdot2\cdot4 \\
+	       & = 1 + 9 + 48 + 64 + 6 + 16 \\
+	       & = 144
+	\end{split}
+\end{equation*}
+
+\end{enumerate}
+
+\subsection*{Question 2.2}
+
+\begin{enumerate}[label=\textbf{\arabic*)}]
+
+\item Let $\alpha_i$ and $\beta_i$ be the Lagrange multipliers. Let us first re-write the constraint $d_i(\mathbf{w}^T\mathbf{x}_i + b) - 1 + \xi_i \ge 0$ in the standard form as:
+
+\begin{equation*}
+	-d_i(\mathbf{w}^T\mathbf{x}_i + b) + 1 - \xi_i \le 0
+\end{equation*}
+
+Then, using the generalized Lagrangian function, we can write the Lagrangian function:
+
+\begin{equation*}
+	\begin{split}
+	L(\mathbf{w}, b, \mathbf{\xi}, \bm{\alpha}, \bm{\beta}) & = \frac{1}{2} \mathbf{w}^T\mathbf{w} + C\sum_{i=1}^{N}\xi_i - \sum_{i=1}^{N}\alpha_i \left( d_i(\mathbf{w}^T\mathbf{x}_i + b) - 1 + \xi_i \right) - \sum_{i=1}^{N}\beta_i \xi_i \\
+	& = \frac{1}{2} \mathbf{w}^T\mathbf{w} + C\sum_{i=1}^{N}\xi_i - \sum_{i=1}^{N}\alpha_i d_i \mathbf{w}^T \mathbf{x}_i - b \sum_{i=1}^{N}\alpha_i d_i + \sum_{i=1}^{N}\alpha_i - \sum_{i=1}^{N}\alpha_i \xi_i - \sum_{i=1}^{N}\beta_i \xi_i
+	\end{split}
+\end{equation*}
+
+We can then write down our KKT conditions:
+
+\begin{align*}
+\frac{\partial L}{\partial \mathbf{w}} &= \mathbf{w} - \sum_{i=1}^{N}\alpha_i d_i \mathbf{x}_i = \mathbf{0} & d_i(\mathbf{w}^T\mathbf{x}_i + b) - 1 + \xi_i &\ge 0 \\
+\frac{\partial L}{\partial b} &= - \sum_{i=1}^{N}\alpha_i d_i = 0 & \alpha_i \left( d_i(\mathbf{w}^T\mathbf{x}_i + b) - 1 + \xi_i \right) &= 0 \\
+\frac{\partial L}{\partial \xi_i} &= C - \alpha_i - \beta_i = 0 & \beta_i \xi_i &= 0 \\
+\alpha_i &\ge 0 & \beta_i &\ge 0
+\end{align*}
+
+Since $\mathbf{w} = \sum_{i=1}^{N}\alpha_i d_i \mathbf{x}_i$, we have:
+
+\begin{equation*}
+	\begin{split}
+		\mathbf{w}^T\mathbf{w} & = \sum_{i=1}^{N}\sum_{j=1}^{N}\alpha_i d_i \alpha_j d_j \mathbf{x}_i^T \mathbf{x}_j \\
+		\sum_{i=1}^{N}\alpha_i d_i \mathbf{w}^T \mathbf{x}_i & = \sum_{i=1}^{N}\sum_{j=1}^{N}\alpha_i d_i \alpha_j d_j \mathbf{x}_i^T \mathbf{x}_j
+	\end{split}
+\end{equation*}
+
+From the KKT conditions, we also have $C = \alpha_i + \beta_i$ and $- b \sum_{i=1}^{N}\alpha_i d_i = 0$. Hence, using all the results that we have found, we can further re-write and simplify our intermediate Lagrangian function to be:
+
+\begin{equation*}
+	\begin{split}
+		L(\mathbf{w}, b, \mathbf{\xi}, \bm{\alpha}, \bm{\beta}) & = \frac{1}{2} \mathbf{w}^T\mathbf{w} + C\sum_{i=1}^{N}\xi_i - \sum_{i=1}^{N}\alpha_i d_i \mathbf{w}^T \mathbf{x}_i - b \sum_{i=1}^{N}\alpha_i d_i + \sum_{i=1}^{N}\alpha_i - \sum_{i=1}^{N}\alpha_i \xi_i - \sum_{i=1}^{N}\beta_i \xi_i \\
+		& = -\frac{1}{2} \sum_{i=1}^{N}\sum_{j=1}^{N}\alpha_i d_i \alpha_j d_j \mathbf{x}_i^T \mathbf{x}_j + \sum_{i=1}^{N}\left( \alpha_i + \beta_i \right)\xi_i + \sum_{i=1}^{N}\alpha_i - \sum_{i=1}^{N}\alpha_i \xi_i - \sum_{i=1}^{N}\beta_i \xi_i \\
+		& = -\frac{1}{2} \sum_{i=1}^{N}\sum_{j=1}^{N}\alpha_i d_i \alpha_j d_j \mathbf{x}_i^T \mathbf{x}_j + \sum_{i=1}^{N}\alpha_i
+	\end{split}
+\end{equation*}
+
+Since $\alpha_i = C - \beta_i$, $\alpha_i \ge 0$, and $\beta_i \ge 0$, we can combine said constraints to form the constraint $0 \le \alpha_i \le C$.\newline
+
+Therefore, we can formulate our dual problem with soft margin in finding the optimal hyperplane as:
+
+\begin{alignat*}{2}
+	& \text{Given: } & & S = \{ \left( \mathbf{x}_i, d_i \right) \} \\
+	& \text{Find: } & & \text{Lagrange multipliers} ~ \{ \alpha_i \} \\
+	& \text{Maximizing: } & & Q(\bm{\alpha}) = \sum_{i=1}^{N}\alpha_i - \frac{1}{2} \sum_{i=1}^{N}\sum_{j=1}^{N}\alpha_i \alpha_j d_i d_j \mathbf{x}_i^T \mathbf{x}_j \\
+	& \text{Subject to: }& \quad & \begin{aligned}[t]
+		\sum_{i=1}^{N} \alpha_i d_i & = 0 & & \\[3ex]
+		0 \le \alpha_i & \le C, & \quad i &=1 ,\dots, N
+	\end{aligned}
+\end{alignat*}
+
+\item If our data is not linearly separable, we would prefer to use soft margin so as to allow a few points to be classified on the wrong side of the best-possible optimal hyperplane. This is acceptable since sometimes it is impossible to completely and exclusively separate our data (perhaps due to data that is noisy or prone to error). Otherwise, if our data is linearly separable, we would prefer to use hard margin.
+
+\end{enumerate}
+
+\end{document}
