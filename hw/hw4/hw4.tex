@@ -1,0 +1,292 @@
+\documentclass[11pt,fancychapters]{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{cite}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{empheq}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage{acro}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{subcaption}
+\usepackage{cancel}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{parskip}
+\usepackage{tcolorbox}
+\usepackage{float}
+\usepackage{bm}
+\usepackage{mathtools}
+\usepackage{pgfplots}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+\pgfplotsset{width=8cm,compat=1.9}
+\newcommand{\dbar}{{d\mkern-7mu\mathchar'26\mkern-2mu}}
+\newcommand{\boxedeq}[2]{\begin{empheq}[box={\fboxsep=6pt\fbox}]{align}\label{#1}#2\end{empheq}}
+\newcommand{\approptoinn}[2]{\mathrel{\vcenter{
+  \offinterlineskip\halign{\hfil$##$\cr
+    #1\propto\cr\noalign{\kern2pt}#1\sim\cr\noalign{\kern-2pt}}}}}
+\newcommand{\appropto}{\mathpalette\approptoinn\relax}
+\renewcommand*{\thesection}{\arabic{section}.}
+\def\*#1{\mathbf{#1}}
+\def\ab{ab}
+\usepackage{tikz}
+\usetikzlibrary{calc,trees,patterns,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+\usepgfplotslibrary{fillbetween}
+\geometry{top=1.3in,bottom=1.3in}
+
+\begin{document}
+\centerline{\huge{SUTD 2021 50.007 Homework 4}}
+
+\begin{table}[ht]
+\centering
+\footnotesize
+ \begin{tabular}{c c} 
+James Raphael Tiovalen & 1004555
+ \end{tabular}
+\end{table}
+
+\section*{Hidden Markov Model}
+
+\subsection*{Question 1}
+
+The transition probabilities are estimated as:
+
+\begin{equation*}
+	a_{u,v} = \frac{\text{Count}(u, v)}{\text{Count}(u)}
+\end{equation*}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|c | c | c | c | c |} 
+		\hline
+		$u \backslash v$ & X & Y & Z & STOP \\
+		\hline
+		START & 2/4 & 0 & 2/4 & 0 \\
+		\hline
+		X & 0 & 2/5 & 2/5 & 1/5 \\
+		\hline
+		Y & 1/5 & 0 & 1/5 & 3/5 \\
+		\hline
+		Z & 2/5 & 3/5 & 0 & 0 \\ [1ex] 
+		\hline
+	\end{tabular}
+\end{table}
+
+The emission probabilities are estimated as:
+
+\begin{equation*}
+	b_{u}(o) = \frac{\text{Count}(u \rightarrow o)}{\text{Count}(u)}
+\end{equation*}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|c | c | c | c |} 
+		\hline
+		$u \backslash o$ & $\textbf{a}$ & $\textbf{b}$ & $\textbf{c}$ \\
+		\hline
+		X & 2/5 & 3/5 & 0 \\
+		\hline
+		Y & 1/5 & 0 & 4/5 \\
+		\hline
+		Z & 1/5 & 3/5 & 1/5 \\ [1ex] 
+		\hline
+	\end{tabular}
+\end{table}
+
+\subsection*{Question 2}
+
+Base case:
+
+\begin{equation*}
+	\pi(0, \text{START}) = 1, ~ \text{otherwise} ~ \pi(0, v) = 0 ~ \text{if} ~ v \neq \text{START}
+\end{equation*}
+
+Moving forward recursively:
+
+\begin{itemize}
+	\item[] $k = 1$
+	\begin{align*}
+		\pi(1, X) &= \pi(0, \text{START}) \times a_{\text{START}, X} \times b_X(\textbf{b}) = 2/4 \times 3/5 = 3/10 \\
+		\pi(1, Y) &= \pi(0, \text{START}) \times a_{\text{START}, Y} \times b_Y(\textbf{b}) = 0 \\
+		\pi(1, Z) &= \pi(0, \text{START}) \times a_{\text{START}, Z} \times b_Z(\textbf{b}) = 2/4 \times 3/5 = 3/10
+	\end{align*}
+	
+	\item[] $k = 2$
+	\begin{align*}
+		\pi(2, X) &= \max_{u \in \mathcal{T}} \{ \pi(1, u) \times a_{u, X} \times b_X(\textbf{c}) \} \\
+		&= \max \{ 3/10 \times 0 \times 0, 0, 3/10 \times 2/5 \times 0 \} \\
+		&= 0 \\
+		\pi(2, Y) &= \max_{u \in \mathcal{T}} \{ \pi(1, u) \times a_{u, Y} \times b_Y(\textbf{c}) \} \\
+		&= \max \{ 3/10 \times 2/5 \times 4/5, 0, 3/10 \times 3/5 \times 4/5 \} \\
+		&= 18/125 \\
+		\pi(2, Z) &= \max_{u \in \mathcal{T}} \{ \pi(1, u) \times a_{u, Z} \times b_Z(\textbf{c}) \} \\
+		&= \max \{ 3/10 \times 2/5 \times 1/5, 0, 3/10 \times 0 \times 1/5 \} \\
+		&= 3/125
+	\end{align*}
+
+	\item[] $k = 3$
+	\begin{align*}
+		\pi(3, \text{STOP}) &= \max_{u \in \mathcal{T}} \{ \pi(2, u) \times a_{u, \text{STOP}} \} \\
+		&= \max \{ 0 \times 1/5, 18/125 \times 3/5, 3/125 \times 0 \} \\
+		&= 54/625
+	\end{align*}
+\end{itemize}
+
+Backtracking:
+
+\begin{align*}
+	y_2^* &= \arg \max_{v \in \mathcal{T}} \{ \pi(2, v) \times a_{v, \text{STOP}} \} = Y \\
+	y_1^* &= \arg \max_{v \in \mathcal{T}} \{ \pi(1, v) \times a_{v, Y} \} = Z
+\end{align*}
+
+Therefore, the optimal sequence is: $Z, Y$.
+
+\subsection*{Question 3}
+
+As shown in class:
+
+\begin{equation*}
+	P(s_i = u | o_1 = \textbf{b}, o_2 = \textbf{c}) = \frac{\alpha_u(i) \beta_u(i)}{\sum_{v} \alpha_v(j) \beta_v(j)},
+\end{equation*}
+
+with any choice of $j \in \{1, 2\}$.
+
+Hence, to calculate the marginal distribution probability term, we will use the Forward-Backward Algorithm.
+
+\subsubsection*{Forward}
+
+\begin{itemize}
+	\item Base case:
+	\begin{align*}
+		\alpha_X(1) &= a_{\text{START}, X} = 2/4 \\
+		\alpha_Y(1) &= a_{\text{START}, Y} = 0 \\
+		\alpha_Z(1) &= a_{\text{START}, Z} = 2/4
+	\end{align*}
+	
+	\item Moving forward recursively:
+	\begin{align*}
+		\alpha_X(2) &= \sum_v \alpha_v(1) \times a_{v, X} \times b_v(\textbf{b}) \\
+		&= (2/4 \times 0 \times 3/5) + 0 + (2/4 \times 2/5 \times 3/5) = 21/50 \\
+		\alpha_Y(2) &= \sum_v \alpha_v(1) \times a_{v, Y} \times b_v(\textbf{b}) \\
+		& = (2/4 \times 2/5 \times 3/5) + 0 + (2/4 \times 3/5 \times 3/5) = 3/10 \\
+		\alpha_Z(2) &= \sum_v \alpha_v(1) \times a_{v, Z} \times b_v(\textbf{b}) \\
+		& = (2/4 \times 2/5 \times 3/5) + 0 + (2/4 \times 0 \times 3/5) = 3/25
+	\end{align*}
+\end{itemize}
+
+\subsubsection*{Backward}
+
+\begin{itemize}
+	\item Base case:
+	\begin{align*}
+		\beta_X(2) &= a_{X, \text{STOP}} \times b_X(\textbf{c}) = 1/5 \times 0 = 0 \\
+		\beta_Y(2) &= a_{Y, \text{STOP}} \times b_Y(\textbf{c}) = 3/5 \times 4/5 = 12/25 \\
+		\beta_Z(2) &= a_{Z, \text{STOP}} \times b_Z(\textbf{c}) = 0 \times 1/5 = 0
+	\end{align*}
+	
+	\item Moving backward recursively:
+	\begin{align*}
+		\beta_X(1) &= \sum_v a_{X, v} \times b_X(\textbf{b}) \times \beta_v(2) \\
+		&= 0 + (2/5 \times 3/5 \times 12/25) + 0 = 72/625 \\
+		\beta_Y(1) &= \sum_v a_{Y, v} \times b_Y(\textbf{b}) \times \beta_v(2) \\
+		&= 0 + (0 \times 0 \times 12/25) + 0 = 0 \\
+		\beta_Z(1) &= \sum_v a_{Z, v} \times b_Z(\textbf{b}) \times \beta_v(2) \\
+		&= 0 + (3/5 \times 3/5 \times 12/25) + 0 = 108/625
+	\end{align*}
+\end{itemize}
+
+Thus:
+
+\begin{equation*}
+	\sum_{v} \alpha_v(j) \beta_v(j) = (2/4 \times 72/625) + (2/4 \times 108/625) = (3/10 \times 12/25) = 18/125
+\end{equation*}
+
+Hence, the marginal distribution table would be:
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|c | c | c |} 
+		\hline
+		$u \backslash i$ & $1$ & $2$ \\
+		\hline
+		X & 2/5 & 0 \\
+		\hline
+		Y & 0 & 1 \\
+		\hline
+		Z & 3/5 & 0 \\ [1ex]
+		\hline
+	\end{tabular}
+\end{table}
+
+Taking the maximum marginal probability value for each column $i$ from the table, we would also consistently obtain and arrive at the optimal sequence of: $Z, Y$.
+
+\subsection*{Question 4}
+
+Assume we have a set of possible states $\{ 0, 1, \ldots, N - 1, N \}$, where $0 = \text{START}$ and $N = \text{STOP}$.
+
+\begin{align*}
+	&P(x_1, \ldots, x_{i-1}, y_1, \ldots, y_{i-1}, z_i = u, x_i, \ldots, x_n, y_i, \ldots, y_n; \theta) \\
+	&= P(x_1, \ldots, x_{i-1}, y_1, \ldots, y_{i-1}, z_i = u; \theta) \times P(x_i, \ldots, x_n, y_i, \ldots, y_n | z_i = u; \theta) \\
+	&= \alpha_u(i) \beta_u(i),
+\end{align*},
+
+where
+
+\begin{align*}
+	\alpha_u(i) &= P(x_1, \ldots, x_{i-1}, y_1, \ldots, y_{i-1}, z_i = u; \theta), \\
+	\beta_u(i) &= P(x_i, \ldots, x_n, y_i, \ldots, y_n | z_i = u; \theta)
+\end{align*}
+
+\subsubsection*{Forward}
+
+\begin{itemize}
+	\item Base case:
+	\begin{equation*}
+		\alpha_u(1) = a_{\text{START}, u}, ~ \forall ~ u \in \{ 1, \ldots, N - 1 \}
+	\end{equation*}
+
+	\item Moving forward recursively, for $i = 1, \ldots, n - 1$:
+	\begin{equation*}
+		\alpha_u(i + 1) = \sum_v \alpha_v(i) \times a_{v, u} \times b_v(x_i) \times c_v(y_i),
+	\end{equation*}
+	where
+	\begin{align*}
+		b_v(x) &= P(x | v), \\
+		c_v(y) &= P(y | x)
+	\end{align*}
+\end{itemize}
+
+\subsubsection*{Backward}
+
+\begin{itemize}
+	\item Base case:
+	\begin{equation*}
+		\beta_u(n) = a_{u, \text{STOP}} \times b_u(x_n) \times c_u(y_n), ~ \forall ~ u \in \{ 1, \ldots, N - 1 \}
+	\end{equation*}
+	
+	\item Moving backward recursively, for $i = n - 1, \ldots, 1$:
+	\begin{equation*}
+		\beta_u(i) = \sum_v a_{u, v} \times b_u(x_i) \times c_u(y_i) \times \beta_v(i + 1)
+	\end{equation*}
+\end{itemize}
+
+At each time step/position, there are $N$ forward ($\alpha$) and $N$ backward ($\beta$) terms to compute. Hence, to compute each term, there are $O(N)$ operations. Thus, at each time step/position, there are $O(N^2)$ operations. Therefore, assuming that the length of the sentence is $n$, which is the number of different time steps/positions, the total time complexity for this algorithm is $O(nN^2)$.
+
+\end{document}
