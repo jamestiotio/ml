@@ -160,6 +160,21 @@ Therefore, the optimal sequence is: $Z, Y$.
 
 \subsection*{Question 3}
 
+The set of possible states is $\{\text{START}, X, Y, Z, \text{STOP}\}$. In an HMM, for a sequence of length $n$, we have
+
+\begin{align*}
+	&P(x_1, \ldots, x_{i-1}, y_i = u, x_i, \ldots, x_n) \\
+	&= P(x_1, \ldots, x_{i-1}, y_i = u) \times P(x_i, \ldots, x_n | y_i = u) \\
+	&= \alpha_u(i) \beta_u(i),
+\end{align*}
+
+where:
+
+\begin{align*}
+	\alpha_u(i) &= P(x_1, \ldots, x_{i-1}, y_i = u), \\
+	\beta_u(i) &= P(x_i, \ldots, x_n | y_i = u)
+\end{align*}
+
 As shown in class:
 
 \begin{equation*}
@@ -226,16 +241,23 @@ Hence, the marginal distribution table would be:
 		\hline
 		$u \backslash i$ & $1$ & $2$ \\
 		\hline
-		X & 2/5 & 0 \\
+		X & 0.0576/0.144 = 2/5 & 0 \\
 		\hline
-		Y & 0 & 1 \\
+		Y & 0 & 0.144/0.144 = 1 \\
 		\hline
-		Z & 3/5 & 0 \\ [1ex]
+		Z & 0.0864/0.144 = 3/5 & 0 \\ [1ex]
 		\hline
 	\end{tabular}
 \end{table}
 
-Taking the maximum marginal probability value for each column $i$ from the table, we would also consistently obtain and arrive at the optimal sequence of: $Z, Y$.
+Taking the maximum marginal probability value for each column $i$ from the table:
+
+\begin{align*}
+	s_1^* &= \arg \max_{s_1}P(s_1 | o_1 = \textbf{b}, o_2 = \textbf{c}) = \arg \max_{s_1}P(s_1, o_1 = \textbf{b}, o_2 = \textbf{c}) = Z \\
+	s_2^* &= \arg \max_{s_2}P(s_2 | o_1 = \textbf{b}, o_2 = \textbf{c}) = \arg \max_{s_2}P(s_2, o_1 = \textbf{b}, o_2 = \textbf{c}) = Y
+\end{align*}
+
+Therefore, we would also consistently obtain and arrive at the optimal sequence of: $Z, Y$.
 
 \subsection*{Question 4}
 
@@ -264,12 +286,12 @@ where
 
 	\item Moving forward recursively, for $i = 1, \ldots, n - 1$:
 	\begin{equation*}
-		\alpha_u(i + 1) = \sum_v \alpha_v(i) \times a_{v, u} \times b_v(x_i) \times c_v(y_i),
+		\alpha_u(i + 1) = \sum_v \alpha_v(i) \times a_{v, u} \times b_v(x_i) \times c_{x_i}(y_i),
 	\end{equation*}
 	where
 	\begin{align*}
 		b_v(x) &= P(x | v), \\
-		c_v(y) &= P(y | x)
+		c_x(y) &= P(y | x)
 	\end{align*}
 \end{itemize}
 
@@ -278,12 +300,12 @@ where
 \begin{itemize}
 	\item Base case:
 	\begin{equation*}
-		\beta_u(n) = a_{u, \text{STOP}} \times b_u(x_n) \times c_u(y_n), ~ \forall ~ u \in \{ 1, \ldots, N - 1 \}
+		\beta_u(n) = a_{u, \text{STOP}} \times b_u(x_n) \times c_{x_n}(y_n), ~ \forall ~ u \in \{ 1, \ldots, N - 1 \}
 	\end{equation*}
 	
 	\item Moving backward recursively, for $i = n - 1, \ldots, 1$:
 	\begin{equation*}
-		\beta_u(i) = \sum_v a_{u, v} \times b_u(x_i) \times c_u(y_i) \times \beta_v(i + 1)
+		\beta_u(i) = \sum_v a_{u, v} \times b_u(x_i) \times c_{x_i}(y_i) \times \beta_v(i + 1)
 	\end{equation*}
 \end{itemize}
 
