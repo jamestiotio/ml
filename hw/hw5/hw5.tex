@@ -1,0 +1,169 @@
+\documentclass[11pt,fancychapters]{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{cite}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{empheq}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage{acro}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{subcaption}
+\usepackage{cancel}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{parskip}
+\usepackage{tcolorbox}
+\usepackage{float}
+\usepackage{bm}
+\usepackage{mathtools}
+\usepackage{pgfplots}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+\pgfplotsset{width=8cm,compat=1.9}
+\newcommand{\dbar}{{d\mkern-7mu\mathchar'26\mkern-2mu}}
+\newcommand{\boxedeq}[2]{\begin{empheq}[box={\fboxsep=6pt\fbox}]{align}\label{#1}#2\end{empheq}}
+\newcommand{\approptoinn}[2]{\mathrel{\vcenter{
+  \offinterlineskip\halign{\hfil$##$\cr
+    #1\propto\cr\noalign{\kern2pt}#1\sim\cr\noalign{\kern-2pt}}}}}
+\newcommand{\appropto}{\mathpalette\approptoinn\relax}
+\renewcommand*{\thesection}{\arabic{section}.}
+\def\*#1{\mathbf{#1}}
+\def\ab{ab}
+\usepackage{tikz}
+\usetikzlibrary{calc,trees,patterns,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+\usepgfplotslibrary{fillbetween}
+\geometry{top=1.3in,bottom=1.3in}
+
+\begin{document}
+\centerline{\huge{SUTD 2021 50.007 Homework 5}}
+
+\begin{table}[ht]
+\centering
+\footnotesize
+ \begin{tabular}{c c} 
+James Raphael Tiovalen & 1004555
+ \end{tabular}
+\end{table}
+
+\section*{Bayesian Networks}
+
+\subsection*{Question 1}
+
+Without knowing the actual value of any node, nodes $\mathbf{X}_1$ and $\mathbf{X}_6$ are independent of each other. This is because there does not exist any path from $\mathbf{X}_1$ to $\mathbf{X}_6$ that is open. Hence, based on the Bayes' ball algorithm, $\mathbf{X}_1$ and $\mathbf{X}_6$ are independent of each other.
+
+If we know the value of nodes $\mathbf{X}_5$ and $\mathbf{X}_{10}$, nodes $\mathbf{X}_1$ and $\mathbf{X}_6$ would also still be independent of each other. This is because while the $\mathbf{X}_9 \rightarrow \mathbf{X}_{10} \rightarrow \mathbf{X}_9$ path is now open, there are no open paths at the $\mathbf{X}_5$ juncture from both $\mathbf{X}_7$ and $\mathbf{X}_8$. Thus, based on the Bayes' ball algorithm, $\mathbf{X}_1$ and $\mathbf{X}_6$ are still independent of each other.
+
+\subsection*{Question 2}
+
+The number of parameters in a Bayesian network correspond to the number of entries in the probability table of each node in the network. Assuming that the number of values that node $k$ can take is $r_k$, then for node $i$ with parents $pa_i$, the number of rows is $\prod_{j \in pa_i} r_j$. The number of columns would be $r_i$. However, since the values in the last column can actually be uniquely determined from the other columns since the values of each row would sum up to $1$, then for node $i$, there are actually $(r_i - 1) \prod_{j \in pa_i} r_j$ free/effective/independent parameters involved.
+
+Therefore, in the initial Bayesian network, the number of effective parameters is:
+
+\begin{align*}
+	&1(\mathbf{X}_1) + 2 \times 1(\mathbf{X}_2) + 2 \times 1(\mathbf{X}_3) + 2 \times 1(\mathbf{X}_4) + 2 \times 1(\mathbf{X}_5) + 1(\mathbf{X}_6) \\ &+ 2 \times 1(\mathbf{X}_7) + 2 \times 1(\mathbf{X}_8) + 2 \times 2 \times 2 \times 1(\mathbf{X}_9) + 2 \times 1(\mathbf{X}_{10}) + 2 \times 1(\mathbf{X}_{11}) \\ &= 26
+\end{align*}
+
+If nodes $\mathbf{X}_3$, $\mathbf{X}_8$ and $\mathbf{X}_9$ can take 5 different values, while all other nodes can take 4 different values, then the number of effective parameters would be:
+
+\begin{align*}
+	&3(\mathbf{X}_1) + 4 \times 3(\mathbf{X}_2) + 4 \times 4(\mathbf{X}_3) + 5 \times 3(\mathbf{X}_4) + 4 \times 3(\mathbf{X}_5) + 3(\mathbf{X}_6) \\ &+ 4 \times 3(\mathbf{X}_7) + 4 \times 4(\mathbf{X}_8) + 4 \times 4 \times 5 \times 4(\mathbf{X}_9) + 5 \times 3(\mathbf{X}_{10}) + 4 \times 3(\mathbf{X}_{11}) \\ &= 436
+\end{align*}
+
+\subsection*{Question 3}
+
+\begin{enumerate}[label=\textbf{(\alph*)}]
+	\item Variables can be independent either because of the topology of the network (structural independence) or because of their conditional probability table entries (numerical independence). Variables that are structurally independent are guaranteed to also be numerically independent, and thus, it is sufficient to simply check only for numerical independence. Because of this fact, we can see from the probability tables that $\mathbf{X}_3$ and $\mathbf{X}_2$ are independent (and hence, $\mathbf{X}_3$ and $\mathbf{X}_1$ are also independent). Thus, to calculate the conditional probability, we can simply calculate:
+	
+	\begin{align*}
+		P(\mathbf{X}_3 = 1 | \mathbf{X}_4 = 2) &= \frac{P(\mathbf{X}_3 = 1, \mathbf{X}_4 = 2)}{P(\mathbf{X}_4 = 2)} \\
+		&= \frac{P(\mathbf{X}_3 = 1)P(\mathbf{X}_4 = 2 | \mathbf{X}_3 = 1)}{P(\mathbf{X}_3 = 1)P(\mathbf{X}_4 = 2 | \mathbf{X}_3 = 1) + P(\mathbf{X}_3 = 2)P(\mathbf{X}_4 = 2 | \mathbf{X}_3 = 2)} \\
+		&= \frac{0.3 \times 0.9}{(0.3 \times 0.9) + (0.7 \times 0.5)} \\
+		&= \frac{27}{62}
+	\end{align*}
+	
+	\item Following a similar argument as for part $\textbf{(a)}$, we can see from the probability tables that $\mathbf{X}_{10}$ and $\mathbf{X}_{9}$ are independent. Thus, $\mathbf{X}_{11}$ and $\mathbf{X}_{9}$ are independent, and following that, $\mathbf{X}_{11}$ and $\mathbf{X}_{5}$ are also independent. Since from part $\textbf{(a)}$ we know that $\mathbf{X}_3$ and $\mathbf{X}_2$ are independent and that $\mathbf{X}_3$ and $\mathbf{X}_1$ are also independent, we can thus conclude that to calculate the conditional probability, we simply have to calculate:
+	
+	\begin{align*}
+		P(\mathbf{X}_5 = 2 | \mathbf{X}_2 = 1, \mathbf{X}_{11} = 2, \mathbf{X}_1 = 1) &= P(\mathbf{X}_5 = 2) \\
+		&= P(\mathbf{X}_3 = 1)P(\mathbf{X}_4 = 1 | \mathbf{X}_3 = 1)P(\mathbf{X}_5 = 2 | \mathbf{X}_3 = 1, \mathbf{X}_4 = 1) \\
+		&+ P(\mathbf{X}_3 = 1)P(\mathbf{X}_4 = 2 | \mathbf{X}_3 = 1)P(\mathbf{X}_5 = 2 | \mathbf{X}_3 = 1, \mathbf{X}_4 = 2) \\
+		&+ P(\mathbf{X}_3 = 2)P(\mathbf{X}_4 = 1 | \mathbf{X}_3 = 2)P(\mathbf{X}_5 = 2 | \mathbf{X}_3 = 2, \mathbf{X}_4 = 1) \\
+		&+ P(\mathbf{X}_3 = 2)P(\mathbf{X}_4 = 2 | \mathbf{X}_3 = 2)P(\mathbf{X}_5 = 2 | \mathbf{X}_3 = 2, \mathbf{X}_4 = 2) \\
+		&= (0.3 \times 0.1 \times 0.5) + (0.3 \times 0.9 \times 0.4) \\
+		&+ (0.7 \times 0.5 \times 0.5) + (0.7 \times 0.5 \times 0.4) \\
+		&= 0.438
+	\end{align*}
+\end{enumerate}
+
+\subsection*{Question 4}
+
+We can use the maximum likelihood estimation to find the optimal model parameters.
+
+\begin{align*}
+	\theta_{\mathbf{X}_7}(1) &= \frac{\text{Count}(\mathbf{X}_5 = 1, \mathbf{X}_7 = 1)}{\text{Count}(\mathbf{X}_5 = 1)} = 1/4 \\
+	\theta_{\mathbf{X}_7}(2) &= \frac{\text{Count}(\mathbf{X}_5 = 1, \mathbf{X}_7 = 2)}{\text{Count}(\mathbf{X}_5 = 1)} = 3/4 \\
+	\theta_{\mathbf{X}_7}(1) &= \frac{\text{Count}(\mathbf{X}_5 = 2, \mathbf{X}_7 = 1)}{\text{Count}(\mathbf{X}_5 = 2)} = 6/8 = 3/4 \\
+	\theta_{\mathbf{X}_7}(2) &= \frac{\text{Count}(\mathbf{X}_5 = 2, \mathbf{X}_7 = 2)}{\text{Count}(\mathbf{X}_5 = 2)} = 2/8 = 1/4 \\
+	\theta_{\mathbf{X}_9}(1) &= \frac{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 1, \mathbf{X}_8 = 1, \mathbf{X}_9 = 1)}{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 1, \mathbf{X}_8 = 1)} = 1/3 \\
+	\theta_{\mathbf{X}_9}(2) &= \frac{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 1, \mathbf{X}_8 = 1, \mathbf{X}_9 = 2)}{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 1, \mathbf{X}_8 = 1)} = 2/3 \\
+	\theta_{\mathbf{X}_9}(1) &= \frac{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 1, \mathbf{X}_8 = 2, \mathbf{X}_9 = 1)}{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 1, \mathbf{X}_8 = 2)} = 1 \\
+	\theta_{\mathbf{X}_9}(2) &= \frac{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 1, \mathbf{X}_8 = 2, \mathbf{X}_9 = 2)}{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 1, \mathbf{X}_8 = 2)} = 0 \\
+	\theta_{\mathbf{X}_9}(1) &= \frac{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 2, \mathbf{X}_8 = 1, \mathbf{X}_9 = 1)}{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 2, \mathbf{X}_8 = 1)} = 1 \\
+	\theta_{\mathbf{X}_9}(2) &= \frac{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 2, \mathbf{X}_8 = 1, \mathbf{X}_9 = 2)}{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 2, \mathbf{X}_8 = 1)} = 0 \\
+	\theta_{\mathbf{X}_9}(1) &= \frac{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 2, \mathbf{X}_8 = 2, \mathbf{X}_9 = 1)}{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 2, \mathbf{X}_8 = 2)} = 1/2 \\
+	\theta_{\mathbf{X}_9}(2) &= \frac{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 2, \mathbf{X}_8 = 2, \mathbf{X}_9 = 2)}{\text{Count}(\mathbf{X}_6 = 1, \mathbf{X}_7 = 2, \mathbf{X}_8 = 2)} = 1/2 \\
+	\theta_{\mathbf{X}_9}(1) &= \frac{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 1, \mathbf{X}_8 = 1, \mathbf{X}_9 = 1)}{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 1, \mathbf{X}_8 = 1)} = 1 \\
+	\theta_{\mathbf{X}_9}(2) &= \frac{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 1, \mathbf{X}_8 = 1, \mathbf{X}_9 = 2)}{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 1, \mathbf{X}_8 = 1)} = 0 \\
+	\theta_{\mathbf{X}_9}(1) &= \frac{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 1, \mathbf{X}_8 = 2, \mathbf{X}_9 = 1)}{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 1, \mathbf{X}_8 = 2)} = 0 \\
+	\theta_{\mathbf{X}_9}(2) &= \frac{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 1, \mathbf{X}_8 = 2, \mathbf{X}_9 = 2)}{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 1, \mathbf{X}_8 = 2)} = 1 \\
+	\theta_{\mathbf{X}_9}(1) &= \frac{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 2, \mathbf{X}_8 = 1, \mathbf{X}_9 = 1)}{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 2, \mathbf{X}_8 = 1)} = 1 \\
+	\theta_{\mathbf{X}_9}(2) &= \frac{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 2, \mathbf{X}_8 = 1, \mathbf{X}_9 = 2)}{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 2, \mathbf{X}_8 = 1)} = 0 \\
+	\theta_{\mathbf{X}_9}(1) &= \frac{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 2, \mathbf{X}_8 = 2, \mathbf{X}_9 = 1)}{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 2, \mathbf{X}_8 = 2)} = 0 \\
+	\theta_{\mathbf{X}_9}(2) &= \frac{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 2, \mathbf{X}_8 = 2, \mathbf{X}_9 = 2)}{\text{Count}(\mathbf{X}_6 = 2, \mathbf{X}_7 = 2, \mathbf{X}_8 = 2)} = 1
+\end{align*}
+
+The resulting probability tables for $\mathbf{X}_7$ and $\mathbf{X}_9$ are:
+
+\centering
+\begin{tabular}{| c | c c |} 
+	\hline
+    & \multicolumn{2}{c|}{$\mathbf{X}_7$} \\
+	$\mathbf{X}_5$  & 1 & 2 \\ \hline
+	1 & 1/4 & 3/4 \\
+	2 & 3/4 & 1/4 \\ [1ex]
+	\hline
+\end{tabular}
+\quad
+\begin{tabular}{| c c c | c c |} 
+	\hline
+	& & & \multicolumn{2}{c|}{$\mathbf{X}_9$} \\
+	$\mathbf{X}_6$ & $\mathbf{X}_7$ & $\mathbf{X}_8$ & 1 & 2 \\ \hline
+	1 & 1 & 1 & 1/3 & 2/3 \\
+	1 & 1 & 2 & 1 & 0 \\
+	1 & 2 & 1 & 1 & 0 \\
+	1 & 2 & 2 & 1/2 & 1/2 \\
+	2 & 1 & 1 & 1 & 0 \\
+	2 & 1 & 2 & 0 & 1 \\
+	2 & 2 & 1 & 1 & 0 \\
+	2 & 2 & 2 & 0 & 1 \\ [1ex]
+	\hline
+\end{tabular}
+
+\end{document}
