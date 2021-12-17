@@ -74,7 +74,7 @@ The transition probabilities are estimated as:
 
 \begin{table}[h!]
 	\centering
-	\begin{tabular}{|c | c | c | c | c |} 
+	\begin{tabular}{| c | c | c | c | c |}
 		\hline
 		$u \backslash v$ & X & Y & Z & STOP \\
 		\hline
@@ -97,7 +97,7 @@ The emission probabilities are estimated as:
 
 \begin{table}[h!]
 	\centering
-	\begin{tabular}{|c | c | c | c |} 
+	\begin{tabular}{| c | c | c | c |}
 		\hline
 		$u \backslash o$ & $\textbf{a}$ & $\textbf{b}$ & $\textbf{c}$ \\
 		\hline
@@ -198,7 +198,7 @@ Hence, to calculate the marginal distribution probability term, we will use the 
 	\item Moving forward recursively:
 	\begin{align*}
 		\alpha_X(2) &= \sum_v \alpha_v(1) \times a_{v, X} \times b_v(\textbf{b}) \\
-		&= (2/4 \times 0 \times 3/5) + 0 + (2/4 \times 2/5 \times 3/5) = 21/50 \\
+		&= (2/4 \times 0 \times 3/5) + 0 + (2/4 \times 2/5 \times 3/5) = 3/25 \\
 		\alpha_Y(2) &= \sum_v \alpha_v(1) \times a_{v, Y} \times b_v(\textbf{b}) \\
 		& = (2/4 \times 2/5 \times 3/5) + 0 + (2/4 \times 3/5 \times 3/5) = 3/10 \\
 		\alpha_Z(2) &= \sum_v \alpha_v(1) \times a_{v, Z} \times b_v(\textbf{b}) \\
@@ -284,7 +284,7 @@ where
 		\alpha_u(1) = a_{\text{START}, u}, ~ \forall ~ u \in \{ 1, \ldots, N - 1 \}
 	\end{equation*}
 
-	\item Moving forward recursively, for $i = 1, \ldots, n - 1$:
+	\item Moving forward recursively, for $i = 2, \ldots, n$:
 	\begin{equation*}
 		\alpha_u(i + 1) = \sum_v \alpha_v(i) \times a_{v, u} \times b_v(x_i) \times c_{x_i}(y_i),
 	\end{equation*}
